@@ -1,4 +1,6 @@
-import { integer, pgTable, varchar, real, pgEnum } from "drizzle-orm/pg-core";
+import { varchar, real, pgEnum, serial } from "drizzle-orm/pg-core";
+import { timestamps } from "../common";
+import { pgTable } from "../table";
 
 export const fitnessLevel = pgEnum("fitness_level", [
     "beginner",
@@ -7,10 +9,11 @@ export const fitnessLevel = pgEnum("fitness_level", [
 ]);
 
 export const user = pgTable("user", {
-    user_id: integer("id").primaryKey(),
+    id: serial("id").primaryKey(),
     name: varchar({ length: 256 }).notNull(),
     email: varchar({ length: 256 }).notNull().unique(),
     weight: real(),
     height: real(),
-    fitness_level: fitnessLevel(),
+    fitnessLevel: fitnessLevel(),
+    ...timestamps,
 });

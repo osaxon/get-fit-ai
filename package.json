@@ -7,9 +7,9 @@
         "build": "next build",
         "start": "next start",
         "lint": "next lint",
-        "generate": "npx drizzle-kit generate",
-        "migrate": "npx drizzle-kit migrate",
-        "studio": "npx drizzle-kit studio"
+        "generate": "drizzle-kit generate",
+        "migrate": "drizzle-kit migrate",
+        "studio": "drizzle-kit studio"
     },
     "dependencies": {
         "@clerk/nextjs": "^6.10.3",
