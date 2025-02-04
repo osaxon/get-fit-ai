@@ -12,5 +12,8 @@ export default defineConfig({
     dbCredentials: {
         url: env.DATABASE_URL,
     },
+    introspect: {
+        casing: "preserve",
+    },
     tablesFilter: [`${siteConfig.name}_*`],
 });

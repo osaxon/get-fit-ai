@@ -1,21 +1,37 @@
 import * as t from "drizzle-orm/pg-core";
 import { timestamps } from "../common";
-import { trainingSession } from "./training-session";
 import { pgTable } from "../table";
 
-export const exerciseStatus = t.pgEnum("exercise_status", [
-    "completed",
-    "skipped",
+export const exerciseLevel = t.pgEnum("exercise_level", [
+    "beginner",
+    "intermediate",
+    "advanced",
 ]);
 
+export const pushPull = t.pgEnum("push_pull", ["push", "pull", "none"]);
+
+export const exerciseType = t.pgEnum("exercise_type", [
+    "strength",
+    "cardio",
+    "balance",
+    "stretching",
+]);
+
+export const measurementType = t.pgEnum("measurement_type", [
+    "time",
+    "reps",
+    "distance",
+    "weight",
+]);
+
+// Master exercise list which can be used accross multiple training plans
 export const exercises = pgTable("exercises", {
     id: t.serial("id").primaryKey(),
-    sessionId: t.serial("session_id").references(() => trainingSession.id),
     name: t.varchar(),
     description: t.text(),
-    sets: t.integer(),
-    reps: t.integer(),
-    rpe: t.integer(),
-    status: exerciseStatus(),
+    type: exerciseType(),
+    measurement: measurementType(),
+    level: exerciseLevel(),
+    pushPull: pushPull("push_pull").default("none"),
     ...timestamps,
 });
