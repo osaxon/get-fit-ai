@@ -1,4 +1,4 @@
-import { env } from "@/data/env/server";
+import { env } from "@/env/server";
 import { neon, Pool } from "@neondatabase/serverless";
 import { drizzle as dbWebsocket } from "drizzle-orm/neon-serverless";
 import { drizzle as dbHttp } from "drizzle-orm/neon-http";
