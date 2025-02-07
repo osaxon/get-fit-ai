@@ -1,4 +1,11 @@
-import { varchar, real, pgEnum, serial } from "drizzle-orm/pg-core";
+import {
+    real,
+    pgEnum,
+    serial,
+    index,
+    uniqueIndex,
+    varchar,
+} from "drizzle-orm/pg-core";
 import { timestamps } from "../common";
 import { pgTable } from "../table";
 import { relations } from "drizzle-orm";
@@ -10,15 +17,24 @@ export const fitnessLevel = pgEnum("fitness_level", [
     "advanced",
 ]);
 
-export const users = pgTable("user", {
-    id: serial("id").primaryKey(),
-    name: varchar({ length: 256 }).notNull(),
-    email: varchar({ length: 256 }).notNull().unique(),
-    weight: real(),
-    height: real(),
-    fitnessLevel: fitnessLevel("fitness_level"),
-    ...timestamps,
-});
+export const users = pgTable(
+    "user",
+    {
+        id: serial("id").primaryKey().unique(),
+        authIdentifier: varchar({ length: 256 }),
+        name: varchar({ length: 256 }).notNull(),
+        email: varchar({ length: 256 }).notNull().unique(),
+        weight: real(),
+        height: real(),
+        fitnessLevel: fitnessLevel("fitness_level"),
+        ...timestamps,
+    },
+    (table) => [
+        index("name_idx").on(table.name),
+        uniqueIndex("email_idx").on(table.email),
+        index("auth_idx").on(table.authIdentifier),
+    ]
+);
 
 // relations
 export const usersRelations = relations(users, ({ many }) => ({

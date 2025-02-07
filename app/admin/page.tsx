@@ -3,7 +3,7 @@ import { db } from "@/db/db";
 export default async function AdminPage() {
 
     const splits = await db.query.trainingSplits.findMany();
-    const exercises = await db.query.exercises.findMany();
+    const exercises = await db.query.exercises.findMany({ with: { exerciseEquipment: { with: { equipment: true } } } });
 
     return (
         <pre className="flex">

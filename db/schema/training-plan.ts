@@ -12,20 +12,18 @@ export const planStatus = t.pgEnum("plan_status", [
     "inactive",
 ]);
 
-export const splitType = t.pgEnum("split_type", [
-    "full_body",
-    "upper_lower",
-    "push_pull_legs",
-    "body_part",
-    "hybrid",
-]);
-
 export const progressionType = t.pgEnum("progression_type", [
     "linear",
     "repetition",
     "time",
     "rpe",
     "wave_loading",
+]);
+
+export const equipmentPreference = t.pgEnum("equipment_preference", [
+    "equipment",
+    "mixed",
+    "none",
 ]);
 
 export const trainingPlans = pgTable("training_plans", {
@@ -40,6 +38,9 @@ export const trainingPlans = pgTable("training_plans", {
         .serial("split_id")
         .references((): t.AnyPgColumn => trainingSplits.id),
     progressionType: progressionType("progression_type").default("rpe"),
+    equipmentPreference: equipmentPreference("equipment_preference").default(
+        "mixed"
+    ),
     ...timestamps,
 });
 

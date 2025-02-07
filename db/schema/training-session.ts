@@ -17,6 +17,8 @@ export const sessionFocus = t.pgEnum("session_focus", [
     "none",
 ]);
 
+export const sessionLocation = t.pgEnum("session_location", ["home", "gym"]);
+
 export const trainingSessions = pgTable("training_sessions", {
     id: t.serial("id").primaryKey(),
     planId: t
@@ -27,8 +29,9 @@ export const trainingSessions = pgTable("training_sessions", {
     date: t.date(),
     weekNum: t.integer("week_num"),
     dayNum: t.integer("day_num"),
-    status: sessionStatus(),
+    status: sessionStatus().default("pending"),
     focus: sessionFocus().default("none"),
+    location: sessionLocation(),
     ...timestamps,
 });
 
