@@ -17,35 +17,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UserReqModel, userUpdateSchema } from "@/db/schema";
+import { updateUser } from "@/features/auth/updateUser";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-const formSchema = z.object({
-  weight: z.coerce.number(),
-  height: z.coerce.number(),
-  fitnessLevel: z.string(),
-});
-
-export default function GetStartedForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function GetStartedForm({ user }: { user: UserReqModel }) {
+  const form = useForm<z.infer<typeof userUpdateSchema>>({
+    resolver: zodResolver(userUpdateSchema),
     defaultValues: {
-      height: 0,
-      weight: 0,
-      fitnessLevel: "",
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      height: user.height ?? 0,
+      weight: user.weight ?? 0,
+      fitnessLevel: "beginner",
+      authIdentifier: user.authIdentifier,
+      isActive: user.isActive,
     },
   });
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  async function onSubmit(values: z.infer<typeof userUpdateSchema>) {
     console.log(values);
-    toast(JSON.stringify(values));
+    console.log("submitting update")
+    await updateUser(values)
+    toast("toast")
+    console.log("finished")
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="height"
@@ -53,7 +69,13 @@ export default function GetStartedForm() {
             <FormItem>
               <FormLabel>Height</FormLabel>
               <FormControl>
-                <Input placeholder="height" {...field} />
+                <Input
+                  type="number"
+                  placeholder="height"
+                  min={100}
+                  {...field}
+                  onChange={event => field.onChange(+event.target.value)}
+                />
               </FormControl>
               <FormDescription>Your height in cm.</FormDescription>
               <FormMessage />
@@ -67,7 +89,11 @@ export default function GetStartedForm() {
             <FormItem>
               <FormLabel>Weight</FormLabel>
               <FormControl>
-                <Input placeholder="weight" {...field} />
+                <Input
+                  type="number"
+                  placeholder="weight"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>Your weight in kg.</FormDescription>
               <FormMessage />
@@ -79,7 +105,7 @@ export default function GetStartedForm() {
           name="fitnessLevel"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} defaultValue={field.value as string}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your fitness level" />
