@@ -20,11 +20,13 @@ import {
 import { UserReqModel, userUpdateSchema } from "@/db/schema";
 import { updateUser } from "@/features/auth/updateUser";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 export default function GetStartedForm({ user }: { user: UserReqModel }) {
+  const router = useRouter();
   const form = useForm<z.infer<typeof userUpdateSchema>>({
     resolver: zodResolver(userUpdateSchema),
     defaultValues: {
@@ -40,10 +42,11 @@ export default function GetStartedForm({ user }: { user: UserReqModel }) {
   });
   async function onSubmit(values: z.infer<typeof userUpdateSchema>) {
     console.log(values);
-    console.log("submitting update")
-    await updateUser(values)
-    toast("toast")
-    console.log("finished")
+    console.log("submsitting update");
+    //await updateUser(values);
+    toast("toast");
+    router.push("/dashboard");
+    console.log("finished");
   }
 
   return (
@@ -74,7 +77,7 @@ export default function GetStartedForm({ user }: { user: UserReqModel }) {
                   placeholder="height"
                   min={100}
                   {...field}
-                  onChange={event => field.onChange(+event.target.value)}
+                  onChange={(event) => field.onChange(+event.target.value)}
                 />
               </FormControl>
               <FormDescription>Your height in cm.</FormDescription>
@@ -89,11 +92,7 @@ export default function GetStartedForm({ user }: { user: UserReqModel }) {
             <FormItem>
               <FormLabel>Weight</FormLabel>
               <FormControl>
-                <Input
-                  type="number"
-                  placeholder="weight"
-                  {...field}
-                />
+                <Input type="number" placeholder="weight" {...field} />
               </FormControl>
               <FormDescription>Your weight in kg.</FormDescription>
               <FormMessage />
@@ -105,7 +104,10 @@ export default function GetStartedForm({ user }: { user: UserReqModel }) {
           name="fitnessLevel"
           render={({ field }) => (
             <FormItem>
-              <Select onValueChange={field.onChange} defaultValue={field.value as string}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value as string}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your fitness level" />
