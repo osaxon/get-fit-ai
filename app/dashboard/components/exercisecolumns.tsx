@@ -1,21 +1,21 @@
 import { ExercisesResModel } from "@/db/schema";
 import { ColumnDef } from "@tanstack/react-table";
 
-export const columns: ColumnDef<ExercisesResModel>[] = [
+export const exerciseColumns: ColumnDef<ExercisesResModel>[] = [
   {
     accessorKey: "id",
-    header: "myid",
+    header: "Id",
   },
   {
     accessorKey: "name",
-    header: "myname",
+    header: "Name",
   },
   {
     accessorKey: "description",
-    header: "mydescription",
+    header: "Description",
   },
   {
     accessorKey: "level",
-    header: "mylevel",
+    header: "Level",
   },
 ];

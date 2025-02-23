@@ -1,25 +1,30 @@
 import { db } from "@/db/db";
-import { columns } from "./columns";
-import { DataTable } from "./data-table";
+import { exerciseColumns } from "./components/exercisecolumns";
+import { DataTable } from "./components/data-table";
+import { trainingSplitColumn } from "./components/training-splitcolumns";
 
 export default async function DashboardPage() {
-    const trainingPlans = await db.query.trainingPlans.findMany({
-        with: {
-            sessions: true,
-        },
-    });
+  const trainingPlans = await db.query.trainingPlans.findMany({
+    with: {
+      sessions: true,
+    },
+  });
 
-    const exercises = await db.query.exercises.findMany();
-    console.log(trainingPlans);
+  const trainingSplit = await db.query.trainingSplits.findMany();
 
-    return (
-        <div>
-            <div>
-                <h2 className="font-bold text-2xl py-2">Exercises</h2>
-                <DataTable columns={columns} data={exercises} />
-            </div>
-        </div>
-    );
+  const exercises = await db.query.exercises.findMany();
+  console.log(trainingPlans);
+
+  return (
+    <div>
+      <div>
+        <h2 className="font-bold text-2xl py-2">Exercises</h2>
+        <DataTable columns={exerciseColumns} data={exercises} />
+        <h2 className="font-bold text-2xl py-2">Training Split</h2>
+        <DataTable columns={trainingSplitColumn} data={trainingSplit} />
+      </div>
+    </div>
+  );
 }
 
 // get user training plans
