@@ -18,8 +18,6 @@ export default async function DashboardPage() {
   return (
     <div>
       <div>
-        <h2 className="font-bold text-2xl py-2">Exercises</h2>
-        <DataTable columns={exerciseColumns} data={exercises} />
         <h2 className="font-bold text-2xl py-2">Training Split</h2>
         <DataTable columns={trainingSplitColumn} data={trainingSplit} />
       </div>
